@@ -34,6 +34,11 @@ selected_sector = st.sidebar.multiselect('Sector', sorted_sector_unique, sorted_
 # Filtering data
 df_selected_sector = df[ (df['GICS Sector'].isin(selected_sector)) ]
 
+# Add filter by CIK
+cik_input = st.sidebar.text_input("CIK")
+if cik_input:
+    df_selected_sector = df_selected_sector.loc[df_selected_sector['CIK'] == cik_input]
+
 st.header('Display Companies in Selected Sector')
 st.write('Data Dimension: ' + str(df_selected_sector.shape[0]) + ' rows and ' + str(df_selected_sector.shape[1]) + ' columns.')
 st.dataframe(df_selected_sector)
@@ -67,16 +72,4 @@ def price_plot(symbol):
   df['Date'] = df.index
   fig = plt.figure()
   plt.fill_between(df.Date, df.Close, color='skyblue', alpha=0.3)
-  plt.plot(df.Date, df.Close, color='skyblue', alpha=0.8)
-  plt.xticks(rotation=90)
-  plt.title(symbol, fontweight='bold')
-  plt.xlabel('Date', fontweight='bold')
-  plt.ylabel('Closing Price', fontweight='bold')
-  return st.pyplot(fig)
-
-num_company = st.sidebar.slider('Number of Companies', 1, 5)
-
-if st.button('Show Plots'):
-    st.header('Stock Closing Price')
-    for i in list(df_selected_sector.Symbol)[:num_company]:
-        price_plot(i)
+  plt.plot
